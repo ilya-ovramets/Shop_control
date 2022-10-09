@@ -26,7 +26,6 @@ namespace Shop_control
                         switch (propertyName?.ToLower())
                         {
                             case "first_name" when reader.TokenType == JsonTokenType.String:
-                                Console.WriteLine(reader.TokenType);
                                 fname = reader.GetString();
                                 break;
                             case "second_name" when reader.TokenType == JsonTokenType.String:
@@ -58,7 +57,8 @@ namespace Shop_control
                 if (birthday == null || String.IsNullOrWhiteSpace(fname) || String.IsNullOrWhiteSpace(sname) || String.IsNullOrWhiteSpace(lname) || String.IsNullOrWhiteSpace(phone_number))
                 {
                     // Add loger before
-
+                    Console.WriteLine("Exception");
+                    return null;
                     throw new Exception();
                 }
             }

@@ -19,7 +19,11 @@ app.Run(async context =>
     {
         await CreatePerson(response, request);
     }
-    else
+    if (path == "/api/shops" && request.Method == "GET")
+    {
+        await GetAllShop(response);
+    }
+
     if (path == "/Person")
     {
         context.Response.ContentType = "text/html";
@@ -30,8 +34,6 @@ app.Run(async context =>
         context.Response.ContentType = "text/html";
         await context.Response.SendFileAsync(".//HTML//meny.html");
     }
-
-
 });
 
 
@@ -71,6 +73,17 @@ async Task CreatePerson(HttpResponse response, HttpRequest request)
     {
         response.StatusCode = 400;
         await response.WriteAsJsonAsync(new { message = "Некорректные данные" });
+    }
+}
+
+
+async Task GetAllShop(HttpResponse response)
+{
+    using (ApplicationContext db = new ApplicationContext())
+    {
+        var shops = db.shops.ToList();
+
+        await response.WriteAsJsonAsync(shops);
     }
 }
 
