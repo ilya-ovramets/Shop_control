@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "B:\\.NET_progekts\\Data_Base\\Shop_control\\Shop_control\\Shop_control.csproj": {}
+    "B:\\.NET_progekts\\Shop_control\\Shop_control\\Shop_control\\Shop_control.csproj": {}
   },
   "projects": {
-    "B:\\.NET_progekts\\Data_Base\\Shop_control\\Shop_control\\Shop_control.csproj": {
+    "B:\\.NET_progekts\\Shop_control\\Shop_control\\Shop_control\\Shop_control.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "B:\\.NET_progekts\\Data_Base\\Shop_control\\Shop_control\\Shop_control.csproj",
+        "projectUniqueName": "B:\\.NET_progekts\\Shop_control\\Shop_control\\Shop_control\\Shop_control.csproj",
         "projectName": "Shop_control",
-        "projectPath": "B:\\.NET_progekts\\Data_Base\\Shop_control\\Shop_control\\Shop_control.csproj",
+        "projectPath": "B:\\.NET_progekts\\Shop_control\\Shop_control\\Shop_control\\Shop_control.csproj",
         "packagesPath": "C:\\Users\\Miron\\.nuget\\packages\\",
-        "outputPath": "B:\\.NET_progekts\\Data_Base\\Shop_control\\Shop_control\\obj\\",
+        "outputPath": "B:\\.NET_progekts\\Shop_control\\Shop_control\\Shop_control\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

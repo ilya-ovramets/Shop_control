@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7gj79izE1/nNlSMQ073F5BWfnjAnhhh3UO/2S5aRUNeOXnpgegdoCjNb5kxoWesiUXRecA7AGE9gvFeiiUuZHA==",
+  "dgSpecHash": "xCGUgXkWce3aOnlxFj3yrkf0PsLfmN36/YsOvzg+miiZ2VIayBfFh9NT81qVS+YFO56li+Cj9baOJ+R6J0jQEg==",
   "success": true,
-  "projectFilePath": "B:\\.NET_progekts\\Data_Base\\Shop_control\\Shop_control\\Shop_control.csproj",
+  "projectFilePath": "B:\\.NET_progekts\\Shop_control\\Shop_control\\Shop_control\\Shop_control.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Miron\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.7\\microsoft.entityframeworkcore.6.0.7.nupkg.sha512",
     "C:\\Users\\Miron\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.7\\microsoft.entityframeworkcore.abstractions.6.0.7.nupkg.sha512",

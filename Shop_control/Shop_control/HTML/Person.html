@@ -9,14 +9,14 @@
 <body>
     <a href="/meny.html">Back</a>
     <h2>Список пользователей</h2>
-    <div class=" ratio-1x1">
-        <input class="first_rb" type="radio" id="radiobut"
+    <div class="ratio-4x3">
+        <input type="radio" id="radiobut" onclick="clickEmployee()"
                name="contact" value="employe_rb">
         <label for="Emplloyee">Працівник</label>
-        <input type="radio" id="radiobut"
+
+        <input type="radio" id="radiobut" onclick="clickCustomer()"
                name="contact" value="customer_rb">
         <label for="Customer">Постійний клієнт</label>
-
     </div>
     <form name="userForm">
         <input type="hidden" name="id" value="0" />
@@ -58,14 +58,16 @@
 
     <script>
         
-        async function CheckRB() {
-            var rb_stat = document.getElementById("radiobut")
-            for (var i; i < rb_stat; i++) {
-                if (rb_stat[i].type == "radio" && rb_stat[i].checked) {
-                    return rb_stat[i].value;
-                }
-            }
-            
+        var statement = "customer";
+
+        function clickEmployee() {
+            statement = "employee"
+            console.log(statement)
+        }
+
+        function clickCustomer() {
+            statement = "customer"
+            console.log(statement)
         }
 
         // Получение всех пользователей
@@ -216,12 +218,19 @@
 
             return tr;
         }
+
+        
+
+        //check radio button
+
         // сброс значений формы
         document.getElementById("reset").addEventListener("click", e => {
 
             e.preventDefault();
             reset();
         })
+
+
 
         // отправка формы
         document.forms["userForm"].addEventListener("submit", e => {
@@ -234,21 +243,21 @@
             var birthday = form.elements["birthday"].value;
             const number = form.elements["number"].value;
 
+
             if (id == 0)
                 createUser(fname, sname, lname, birthday, number);
             else
                 editUser(id, fname, sname, lname, birthday, number);
         });
+
         
-        if(CheckRB() == "employee_rb"){
-            console.log("employee")
-        }else if(CheckRB() == "customer_rb"){
-            console.log("customer")
-        }
+
+
+        
 
 
         // загрузка пользователей
         getUsers();
-    </script>
-</body>
+        </script>
+    </body>
 </html>
