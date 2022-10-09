@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Список пользователей</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <a href="/meny.html">Back</a>
+    <h2>Список пользователей</h2>
+    <div class=" ratio-1x1">
+        <input class="first_rb" type="radio" id="radiobut"
+               name="contact" value="employe_rb">
+        <label for="Emplloyee">Працівник</label>
+        <input type="radio" id="radiobut"
+               name="contact" value="customer_rb">
+        <label for="Customer">Постійний клієнт</label>
+
+    </div>
+    <form name="userForm">
+        <input type="hidden" name="id" value="0" />
+        <div class="mb-3">
+            <label class="form-label" for="name">Імя:</label>
+            <input class="form-control" name="first_name" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="name">Прізвище:</label>
+            <input class="form-control" name="second_name" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="name">По-батькові:</label>
+            <input class="form-control" name="last_name" />
+        </div>
+
+        <div class="mb-3">
+            <label for="date" class="form-label">Дата народження:</label>
+            <input class="form-control" type="date" name="birthday" />
+        </div>
+        <div class="mb-3">
+            <label for="number" class="form-label">Номер телефону:</label>
+            <input class="form-control" type="tel" name="number" />
+        </div>
+        <div class="email_reg">
+            <label for="number" class="form-label">Email:</label>
+            <input class="form-control" type="email" name="email" />
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+            <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
+        </div>
+    </form>
+    <table class="table table-condensed table-striped table-bordered">
+        <thead><tr><th>Имя</th><th>Вік</th><th>Місто</th></tr></thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        
+        async function CheckRB() {
+            var rb_stat = document.getElementById("radiobut")
+            for (var i; i < rb_stat; i++) {
+                if (rb_stat[i].type == "radio" && rb_stat[i].checked) {
+                    return rb_stat[i].value;
+                }
+            }
+            
+        }
+
+        // Получение всех пользователей
+        async function getUsers() {
+            // отправляет запрос и получаем ответ
+            const response = await fetch("/api/users", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            // если запрос прошел нормально
+            if (response.ok) {
+                // получаем данные
+                const users = await response.json();
+                const rows = document.querySelector("tbody");
+                // добавляем полученные элементы в таблицу
+                users.forEach(user => rows.append(row(user)));
+            }
+        }
+        // Получение одного пользователя
+        async function getUser(id) {
+            const response = await fetch("/api/users/" + id, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok) {
+                const user = await response.json();
+                const form = document.forms["userForm"];
+                form.elements["id"].value = user.id;
+                form.elements["name"].value = user.name;
+                form.elements["age"].value = user.age;
+                form.elements["sity"].value = user.sity;
+            }
+            else {
+                // если произошла ошибка, получаем сообщение об ошибке
+                const error = await response.json();
+                console.log(error.message); // и выводим его на консоль
+            }
+        }
+        // Добавление пользователя
+        async function createUser(first_name,second_name,last_name, bird, number) {
+
+            const response = await fetch("api/users", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    first_name: first_name,
+                    second_name: second_name,
+                    last_name: last_name,
+                    birtdhday: bird,
+                    phone_number: number
+                })
+            });
+            if (response.ok) {
+                const user = await response.json();
+                reset();
+                document.querySelector("tbody").append(row(user));
+            }
+            else {
+                const error = await response.json();
+                console.log(error.message);
+            }
+        }
+        // Изменение пользователя
+        async function editUser(userId, userName, userAge, userSity) {
+            const response = await fetch("api/users", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: userId,
+                    name: userName,
+                    age: parseInt(userAge, 10),
+                    sity: userSity
+                })
+            });
+            if (response.ok) {
+                const user = await response.json();
+                reset();
+                document.querySelector("tr[data-rowid='" + user.id + "']").replaceWith(row(user));
+            }
+            else {
+                const error = await response.json();
+                console.log(error.message);
+            }
+        }
+        // Удаление пользователя
+        async function deleteUser(id) {
+            const response = await fetch("/api/users/" + id, {
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok) {
+                const user = await response.json();
+                document.querySelector("tr[data-rowid='" + user.id + "']").remove();
+            }
+            else {
+                const error = await response.json();
+                console.log(error.message);
+            }
+        }
+
+        // сброс данных формы после отправки
+        function reset() {
+            const form = document.forms["userForm"];
+            form.reset();
+            form.elements["id"].value = 0;
+        }
+        // создание строки для таблицы
+        function row(user) {
+
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-rowid", user.id);
+
+            const nameTd = document.createElement("td");
+            nameTd.append(user.name);
+            tr.append(nameTd);
+
+            const ageTd = document.createElement("td");
+            ageTd.append(user.age);
+            tr.append(ageTd);
+
+            const sityTd = document.createElement("td");
+            sityTd.append(user.sity);
+            tr.append(sityTd);
+
+            const linksTd = document.createElement("td");
+
+            const editLink = document.createElement("a");
+            editLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            editLink.append("Изменить");
+            editLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                getUser(user.id);
+            });
+            linksTd.append(editLink);
+
+            const removeLink = document.createElement("a");
+            removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            removeLink.append("Удалить");
+            removeLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                deleteUser(user.id);
+            });
+
+            linksTd.append(removeLink);
+            tr.appendChild(linksTd);
+
+            return tr;
+        }
+        // сброс значений формы
+        document.getElementById("reset").addEventListener("click", e => {
+
+            e.preventDefault();
+            reset();
+        })
+
+        // отправка формы
+        document.forms["userForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["userForm"];
+            const id = form.elements["id"].value;
+            const fname = form.elements["first_name"].value;
+            const sname = form.elements["second_name"].value;
+            const lname = form.elements["last_name"].value;
+            var birthday = form.elements["birthday"].value;
+            const number = form.elements["number"].value;
+
+            if (id == 0)
+                createUser(fname, sname, lname, birthday, number);
+            else
+                editUser(id, fname, sname, lname, birthday, number);
+        });
+        
+        if(CheckRB() == "employee_rb"){
+            console.log("employee")
+        }else if(CheckRB() == "customer_rb"){
+            console.log("customer")
+        }
+
+
+        // загрузка пользователей
+        getUsers();
+    </script>
+</body>
+</html>
