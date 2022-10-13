@@ -1,5 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using System.ComponentModel.DataAnnotations;
+﻿
+
+using System.Data;
 
 namespace Shop_control.Data_base
 {
@@ -66,8 +67,9 @@ namespace Shop_control.Data_base
         public string? second_name { get; set; }
         public string? last_name { get; set; }
         public string? phone_number { get; set; }
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateOnly? birthday { get; set; }
+
+        
     }
 
     public class Adresses_type
@@ -114,6 +116,10 @@ namespace Shop_control.Data_base
         public string? corp_email { get; set; }
         public int shop_id { get; set; }
         public int position_id { get; set; }
+
+        public Persons? persons { get; set; }  
+
+        
     }
 
     public class Furnitures

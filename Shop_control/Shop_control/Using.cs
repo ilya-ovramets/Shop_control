@@ -1,0 +1,10 @@
+﻿global using Microsoft.EntityFrameworkCore;
+global using Shop_control.Converter;
+global using Shop_control.Data_base;
+global using Shop_control.Pages;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
+global using System;
+global using System.Runtime.InteropServices;
+global using System.ComponentModel.DataAnnotations;
+global using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;

@@ -50,15 +50,13 @@
 
         <div class="myDiv_shop" id="shop_all">
             <label for="number" class="form-label">Shop selector</label>
-            <select class="shop_all_select">
-                <option value="value">text</option>
+            <select class="shop_all_select" id="shop_all_select_1" name="shop_id">
             </select>
         </div>
 
-        <div class="myDiv_shop" id="position_all">
+        <div class="myDiv_positions" id="position_all">
             <label for="number" class="form-label">Position selector</label>
-            <select class="position_all_select">
-                <option value="value">text</option>
+            <select class="position_all_select" id="position_all_select" name="position_id">
             </select>
         </div>
 
@@ -76,23 +74,30 @@
         </tbody>
     </table>
 
-    <script>
+    <script type="text/javascript">
         
-        var statement = "customer";
-
-       
+        var statement = "employee";
 
         // Получение всех пользователей
         async function getUsers() {
             // отправляет запрос и получаем ответ
-            const response = await fetch("/api/users", {
-                method: "GET",
-                headers: { "Accept": "application/json" }
-            });
+            const response = null;
+            if (statement == "employee") {
+                const response = await fetch("/api/employee", {
+                    method: "POST",
+                    headers: { "Accept": "application/json", "Content-Type": "application/json" }
+                });
+            } else if (statement == "customer") {
+                const response = await fetch("/api/customer", {
+                    method: "POST",
+                    headers: { "Accept": "application/json", "Content-Type": "application/json" }
+                });
+            }
             // если запрос прошел нормально
             if (response.ok) {
                 // получаем данные
                 const users = await response.json();
+
                 const rows = document.querySelector("tbody");
                 // добавляем полученные элементы в таблицу
                 users.forEach(user => rows.append(row(user)));
@@ -100,21 +105,49 @@
         }
 
         async function getShop() {
-            const response = await fetch("/api/shop", {
+            const response = await fetch("/api/shops", {
                 method: "GET",
-                headers: { "Accept": "application/json" }
+                headers: { "Accept": "application/json", "Content-Type": "application/json" }
             });
+
+
             if (response.ok) {
-                const shops = await response.json()
-                const select = document.querySelector("select")
-                shops.forEach(shop => select.append(addOption(shop)))
+                const shops = response.json();
+                const selects = document.getElementById("shop_all_select_1")
+                shops.then(function (value) {
+                    value.forEach(shop => selects.appendChild(addOptionShop(shop)));
+                })
+
+
             }
         }
 
-        async function addOption(shop) {
-            const select = document.createElement("select");
+        function addOptionShop(shop) {
+            const select = document.createElement("option");
             select.append(shop.name)
-            select.value = shop.shop_id
+            select.value = shop.shop_id;
+            return select;
+        }
+
+        async function getPositions() {
+            const response = await fetch("/api/positions", {
+                method: "GET",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" }
+            });
+
+            if (response.ok) {
+                const positions = response.json();
+                const selects = document.getElementById("position_all_select")
+                positions.then(function (value) {
+                    value.forEach(shop => selects.appendChild(addOptionPositions(shop)));
+                })
+            }
+        }
+
+        function addOptionPositions(positions) {
+            const select = document.createElement("option");
+            select.append(positions.name_position)
+            select.value = positions.position_id;
             return select;
         }
 
@@ -141,8 +174,9 @@
         // Добавление пользователя
         async function createUser(first_name, second_name, last_name, bird, number, email, shop_id = 0, position_id = 0) {
             var response;
+            console.log("in response")
             if (statement == "customer") {
-                var response = await fetch("api/users", {
+                response = await fetch("/api/customer", {
                     method: "POST",
                     headers: { "Accept": "application/json", "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -156,7 +190,7 @@
                 });
             }
             if (statement == "employee") {
-                const response = await fetch("api/users", {
+                response = await fetch("/api/employee", {
                     method: "POST",
                     headers: { "Accept": "application/json", "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -166,11 +200,12 @@
                         birtdhday: bird,
                         phone_number: number,
                         email: email,
-                        shop_id: parseInt(shop_id, 10),
-                        position_id: parseInt(position_id, 10)
+                        shop_id: shop_id,
+                        position_id: position_id
                     })
                 });
             }
+            console.log("response send")
             if (response.ok) {
                 const user = await response.json();
                 reset();
@@ -275,15 +310,16 @@
         //check radio button
         function clickEmployee() {
             statement = "employee";
-            getShop();
             document.getElementById("shop_all").style.visibility = "visible";
             document.getElementById("position_all").style.visibility = "visible";
+            getUser();
         }
 
         function clickCustomer() {
             statement = "customer";
             document.getElementById("shop_all").style.visibility = "hidden";
             document.getElementById("position_all").style.visibility = "hidden";
+            getUser();
         }
 
         
@@ -307,23 +343,22 @@
             const lname = form.elements["last_name"].value;
             var birthday = form.elements["birthday"].value;
             const number = form.elements["number"].value;
-            const email = form.elements["email"].value
+            const email = form.elements["email"].value;
+            const shop_id = form.elements["shop_id"].value;
+            const position_id = form.elements["position_id"].value;
 
+            console.log(position_id);
 
             if (id == 0)
-                createUser(fname, sname, lname, birthday, number, email);
+                createUser(fname, sname, lname, birthday, number, email, shop_id, position_id);
             else
                 editUser(id, fname, sname, lname, birthday, number);
         });
-
-        
-
-
-        
-
-
+        getShop();
+        getPositions();
+        console.log("Get shop 1")
         // загрузка пользователей
-        getUsers();
+        //getUsers();
         </script>
     </body>
 </html>
